@@ -1,0 +1,8 @@
+dist/*.spec.*
+src/*
+tsconfig.json
+source/
+dest/
+.*
+.
+*.tgz

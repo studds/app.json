@@ -1,0 +1,19 @@
+{
+    "$schema": "./packages/app.json/schema.json",
+    "uri": "",
+    "env": {
+        "CHEERFUL": "Cheap",
+        "HELLO": {
+            "description": "A description"
+        },
+        "GOODBYE": {
+            "description": "Most grood",
+            "value": "Terraform"
+        }
+    },
+    "environments": {
+        "local": {
+            "env": {}
+        }
+    }
+}
