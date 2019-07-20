@@ -1,6 +1,7 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { Convert, IAppJSON, IEnvVarDefinition } from '../interfaces';
+import { writeFileSync } from 'fs';
+import { IAppJSON, IEnvVarDefinition } from '../interfaces';
 import { config } from 'dotenv';
+import { loadAppJson } from './load-app-json';
 
 export function exportDotenv(environmentName?: string) {
     // read existing dotenv config, if any
@@ -25,8 +26,7 @@ function createDotEnv(env: { [x: string]: string | IEnvVarDefinition }) {
 }
 
 function getEnv(environmentName: string | undefined) {
-    const json = readFileSync('app.json', { encoding: 'utf-8' });
-    const appJson = Convert.toIAppJSON(json);
+    const appJson = loadAppJson();
     const baseEnv = appJson.env || {};
     const environmentEnv = getEnvironmentEnv(environmentName, appJson);
     const env = { ...baseEnv, ...environmentEnv };

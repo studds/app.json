@@ -6,7 +6,6 @@
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
-// tslint: disable
 
 export interface IAppJSON {
     /**
@@ -63,35 +62,35 @@ export interface IEnvironment {
 
 export interface IOutputDefinition {
     /**
-     * a human-friendly blurb about what the value is for and how to determine what it should be
+     * a human-friendly blurb about what this output is and what you can do with it
      */
     description: string;
+    /**
+     * the environment variable this output should be mapped to when used elsewhere
+     */
+    mapTo?: string;
 }
 
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
     public static toIAppJSON(json: string): IAppJSON {
-        return cast(JSON.parse(json), r('IAppJSON'));
+        return cast(JSON.parse(json), r("IAppJSON"));
     }
 
     public static iAppJSONToJson(value: IAppJSON): string {
-        return JSON.stringify(uncast(value, r('IAppJSON')), null, 2);
+        return JSON.stringify(uncast(value, r("IAppJSON")), null, 2);
     }
 }
 
 function invalidValue(typ: any, val: any): never {
-    throw Error(
-        `Invalid value ${JSON.stringify(val)} for type ${JSON.stringify(typ)}`
-    );
+    throw Error(`Invalid value ${JSON.stringify(val)} for type ${JSON.stringify(typ)}`);
 }
 
 function jsonToJSProps(typ: any): any {
     if (typ.jsonToJS === undefined) {
-        let map: any = {};
-        typ.props.forEach(
-            (p: any) => (map[p.json] = { key: p.js, typ: p.typ })
-        );
+        var map: any = {};
+        typ.props.forEach((p: any) => map[p.json] = { key: p.js, typ: p.typ });
         typ.jsonToJS = map;
     }
     return typ.jsonToJS;
@@ -99,10 +98,8 @@ function jsonToJSProps(typ: any): any {
 
 function jsToJSONProps(typ: any): any {
     if (typ.jsToJSON === undefined) {
-        let map: any = {};
-        typ.props.forEach(
-            (p: any) => (map[p.js] = { key: p.json, typ: p.typ })
-        );
+        var map: any = {};
+        typ.props.forEach((p: any) => map[p.js] = { key: p.json, typ: p.typ });
         typ.jsToJSON = map;
     }
     return typ.jsToJSON;
@@ -110,17 +107,15 @@ function jsToJSONProps(typ: any): any {
 
 function transform(val: any, typ: any, getProps: any): any {
     function transformPrimitive(typ: string, val: any): any {
-        if (typeof typ === typeof val) {
-            return val;
-        }
+        if (typeof typ === typeof val) return val;
         return invalidValue(typ, val);
     }
 
     function transformUnion(typs: any[], val: any): any {
         // val must validate against one typ in typs
-        let l = typs.length;
-        for (let i = 0; i < l; i++) {
-            let typ = typs[i];
+        var l = typs.length;
+        for (var i = 0; i < l; i++) {
+            var typ = typs[i];
             try {
                 return transform(val, typ, getProps);
             } catch (_) {}
@@ -129,17 +124,13 @@ function transform(val: any, typ: any, getProps: any): any {
     }
 
     function transformEnum(cases: string[], val: any): any {
-        if (cases.indexOf(val) !== -1) {
-            return val;
-        }
+        if (cases.indexOf(val) !== -1) return val;
         return invalidValue(cases, val);
     }
 
     function transformArray(typ: any, val: any): any {
         // val must be an array with no invalid elements
-        if (!Array.isArray(val)) {
-            return invalidValue('array', val);
-        }
+        if (!Array.isArray(val)) return invalidValue("array", val);
         return val.map(el => transform(el, typ, getProps));
     }
 
@@ -149,25 +140,19 @@ function transform(val: any, typ: any, getProps: any): any {
         }
         const d = new Date(val);
         if (isNaN(d.valueOf())) {
-            return invalidValue('Date', val);
+            return invalidValue("Date", val);
         }
         return d;
     }
 
-    function transformObject(
-        props: { [k: string]: any },
-        additional: any,
-        val: any
-    ): any {
-        if (val === null || typeof val !== 'object' || Array.isArray(val)) {
-            return invalidValue('object', val);
+    function transformObject(props: { [k: string]: any }, additional: any, val: any): any {
+        if (val === null || typeof val !== "object" || Array.isArray(val)) {
+            return invalidValue("object", val);
         }
-        let result: any = {};
+        var result: any = {};
         Object.getOwnPropertyNames(props).forEach(key => {
             const prop = props[key];
-            const v = Object.prototype.hasOwnProperty.call(val, key)
-                ? val[key]
-                : undefined;
+            const v = Object.prototype.hasOwnProperty.call(val, key) ? val[key] : undefined;
             result[prop.key] = transform(v, prop.typ, getProps);
         });
         Object.getOwnPropertyNames(val).forEach(key => {
@@ -178,37 +163,24 @@ function transform(val: any, typ: any, getProps: any): any {
         return result;
     }
 
-    if (typ === 'any') {
-        return val;
-    }
+    if (typ === "any") return val;
     if (typ === null) {
-        if (val === null) {
-            return val;
-        }
+        if (val === null) return val;
         return invalidValue(typ, val);
     }
-    if (typ === false) {
-        return invalidValue(typ, val);
-    }
-    while (typeof typ === 'object' && typ.ref !== undefined) {
+    if (typ === false) return invalidValue(typ, val);
+    while (typeof typ === "object" && typ.ref !== undefined) {
         typ = typeMap[typ.ref];
     }
-    if (Array.isArray(typ)) {
-        return transformEnum(typ, val);
-    }
-    if (typeof typ === 'object') {
-        return typ.hasOwnProperty('unionMembers')
-            ? transformUnion(typ.unionMembers, val)
-            : typ.hasOwnProperty('arrayItems')
-            ? transformArray(typ.arrayItems, val)
-            : typ.hasOwnProperty('props')
-            ? transformObject(getProps(typ), typ.additional, val)
+    if (Array.isArray(typ)) return transformEnum(typ, val);
+    if (typeof typ === "object") {
+        return typ.hasOwnProperty("unionMembers") ? transformUnion(typ.unionMembers, val)
+            : typ.hasOwnProperty("arrayItems")    ? transformArray(typ.arrayItems, val)
+            : typ.hasOwnProperty("props")         ? transformObject(getProps(typ), typ.additional, val)
             : invalidValue(typ, val);
     }
     // Numbers can be parsed by Date but shouldn't be.
-    if (typ === Date && typeof val !== 'number') {
-        return transformDate(typ, val);
-    }
+    if (typ === Date && typeof val !== "number") return transformDate(typ, val);
     return transformPrimitive(typ, val);
 }
 
@@ -241,47 +213,22 @@ function r(name: string) {
 }
 
 const typeMap: any = {
-    IAppJSON: o(
-        [
-            {
-                json: 'env',
-                js: 'env',
-                typ: u(undefined, m(u(r('IEnvVarDefinition'), '')))
-            },
-            {
-                json: 'environments',
-                js: 'environments',
-                typ: u(undefined, m(r('IEnvironment')))
-            },
-            {
-                json: 'output',
-                js: 'output',
-                typ: u(undefined, m(r('IOutputDefinition')))
-            },
-            { json: 'uri', js: 'uri', typ: '' }
-        ],
-        'any'
-    ),
-    IEnvVarDefinition: o(
-        [
-            { json: 'description', js: 'description', typ: '' },
-            { json: 'required', js: 'required', typ: u(undefined, true) },
-            { json: 'value', js: 'value', typ: u(undefined, '') }
-        ],
-        'any'
-    ),
-    IEnvironment: o(
-        [
-            {
-                json: 'env',
-                js: 'env',
-                typ: u(undefined, m(u(r('IEnvVarDefinition'), '')))
-            }
-        ],
-        'any'
-    ),
-    IOutputDefinition: o(
-        [{ json: 'description', js: 'description', typ: '' }],
-        'any'
-    )
+    "IAppJSON": o([
+        { json: "env", js: "env", typ: u(undefined, m(u(r("IEnvVarDefinition"), ""))) },
+        { json: "environments", js: "environments", typ: u(undefined, m(r("IEnvironment"))) },
+        { json: "output", js: "output", typ: u(undefined, m(r("IOutputDefinition"))) },
+        { json: "uri", js: "uri", typ: "" },
+    ], "any"),
+    "IEnvVarDefinition": o([
+        { json: "description", js: "description", typ: "" },
+        { json: "required", js: "required", typ: u(undefined, true) },
+        { json: "value", js: "value", typ: u(undefined, "") },
+    ], "any"),
+    "IEnvironment": o([
+        { json: "env", js: "env", typ: u(undefined, m(u(r("IEnvVarDefinition"), ""))) },
+    ], "any"),
+    "IOutputDefinition": o([
+        { json: "description", js: "description", typ: "" },
+        { json: "mapTo", js: "mapTo", typ: u(undefined, "") },
+    ], "any"),
 };

@@ -1,17 +1,7 @@
-import { IAppJSON } from '../interfaces';
-import { writeFileSync } from 'fs';
+import { getBaseConfig } from './get-base-config';
+import { writeAppJson } from './write-app-json';
 
 export function init() {
-    const appJson: IAppJSON = {
-        uri: '',
-        env: {},
-        environments: {
-            local: {
-                env: {}
-            }
-        }
-    };
-    writeFileSync('app.json', JSON.stringify(appJson, null, 4), {
-        encoding: 'utf-8'
-    });
+    const appJson = getBaseConfig();
+    writeAppJson(appJson);
 }

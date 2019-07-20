@@ -44,7 +44,12 @@
             "type": "object",
             "properties": {
                 "description": {
-                    "description": "a human-friendly blurb about what the value is for and how to determine what it should be",
+                    "description": "a human-friendly blurb about what this output is and what you can do with it",
+                    "type": "string",
+                    "title": "description"
+                },
+                "mapTo": {
+                    "description": "the environment variable this output should be mapped to when used elsewhere",
                     "type": "string",
                     "title": "description"
                 }
