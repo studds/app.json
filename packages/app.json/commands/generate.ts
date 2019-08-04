@@ -43,7 +43,7 @@ function getOutputs(template: Template): IAppJSON['output'] {
         output[key] = {
             description:
                 (cfOutput.Description as string) ||
-                'CloudFormation output: ${key}',
+                `CloudFormation output: ${key}`,
             mapTo: envKey
         };
     });

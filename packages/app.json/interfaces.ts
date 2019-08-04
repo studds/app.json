@@ -9,6 +9,10 @@
 
 export interface IAppJSON {
     /**
+     * List of dependencies for this app
+     */
+    dependencies?: IDependency[];
+    /**
      * A key-value object for config variables to add to the app’s runtime environment. Keys are
      * the names of the config variables. Values can be strings or objects. If the value is a
      * string, it will be used. If the value is an object, it defines specific requirements for
@@ -24,14 +28,32 @@ export interface IAppJSON {
      */
     environments?: { [key: string]: IEnvironment };
     /**
+     * Unique identifier for this app. This is used to resolve dependencies.
+     */
+    id: string;
+    /**
+     * Human-friendly name for this app (if the id isn't friendly enough)
+     */
+    name?: string;
+    /**
      * Outputs that are available once this app is deployed
      */
     output?: { [key: string]: IOutputDefinition };
+}
+
+/**
+ * List of dependencies for this app
+ */
+export interface IDependency {
     /**
-     * Unique identifier for this app, eg. the repository url. This is used to resolve
-     * dependencies.
+     * The id of the app we're dependent on (as defined in another app.json)
      */
-    uri: string;
+    id: string;
+    /**
+     * The environment variables to import from this dependency (must much those defined in
+     * app.json)
+     */
+    imports: string[];
 }
 
 export interface IEnvVarDefinition {
@@ -214,10 +236,16 @@ function r(name: string) {
 
 const typeMap: any = {
     "IAppJSON": o([
+        { json: "dependencies", js: "dependencies", typ: u(undefined, a(r("IDependency"))) },
         { json: "env", js: "env", typ: u(undefined, m(u(r("IEnvVarDefinition"), ""))) },
         { json: "environments", js: "environments", typ: u(undefined, m(r("IEnvironment"))) },
+        { json: "id", js: "id", typ: "" },
+        { json: "name", js: "name", typ: u(undefined, "") },
         { json: "output", js: "output", typ: u(undefined, m(r("IOutputDefinition"))) },
-        { json: "uri", js: "uri", typ: "" },
+    ], "any"),
+    "IDependency": o([
+        { json: "id", js: "id", typ: "" },
+        { json: "imports", js: "imports", typ: a("") },
     ], "any"),
     "IEnvVarDefinition": o([
         { json: "description", js: "description", typ: "" },

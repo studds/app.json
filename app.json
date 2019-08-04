@@ -1,6 +1,6 @@
 {
     "$schema": "./packages/app.json/schema.json",
-    "uri": "",
+    "id": "",
     "env": {
         "CHEERFUL": "Cheap",
         "HELLO": {

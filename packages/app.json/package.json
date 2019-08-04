@@ -10,7 +10,7 @@
     "prepublishOnly": "run-s build"
   },
   "bin": {
-    "ajx": "index.js"
+    "appcfg": "index.js"
   },
   "author": "",
   "license": "MIT",

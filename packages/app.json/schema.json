@@ -39,6 +39,32 @@
                 ]
             }
         },
+        "IDependency": {
+            "title": "IDependency",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The id of the app we're dependent on (as defined in another app.json)",
+                    "type": "string",
+                    "title": "id"
+                },
+                "imports": {
+                    "description": "The environment variables to import from this dependency (must much those defined in app.json)",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": ["id", "imports"]
+        },
+        "IDependencies": {
+            "description": "List of dependencies for this app",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/IDependency"
+            }
+        },
         "IOutputDefinition": {
             "title": "IOutputDefinition",
             "type": "object",
@@ -81,20 +107,29 @@
                 "$ref": "#/definitions/IEnvironment"
             }
         },
-
         "IAppJson": {
             "title": "IAppJson",
             "type": "object",
             "properties": {
-                "uri": {
-                    "description": "Unique identifier for this app, eg. the repository url. This is used to resolve dependencies.",
+                "id": {
+                    "description": "Unique identifier for this app. This is used to resolve dependencies.",
                     "type": "string",
-                    "title": "uri"
+                    "title": "id"
+                },
+                "name": {
+                    "description": "Human-friendly name for this app (if the id isn't friendly enough)",
+                    "type": "string",
+                    "title": "name"
                 },
                 "env": {
                     "description": "A key-value object for config variables to add to the app’s runtime environment. Keys are the names of the config variables. Values can be strings or objects. If the value is a string, it will be used. If the value is an object, it defines specific requirements for that variable.",
                     "$ref": "#/definitions/IEnv",
                     "title": "env"
+                },
+                "dependencies": {
+                    "description": "List of dependencies for this app",
+                    "$ref": "#/definitions/IDependencies",
+                    "title": "dependencies"
                 },
                 "environments": {
                     "description": "A key-value object holding environment-specific overrides for app.json keys.\nEach key in the object is the name of an environment.\nThis can include runtime environments, but can also include 'local' for local development or 'ci'\nfor CI.",
@@ -107,7 +142,7 @@
                     "title": "output"
                 }
             },
-            "required": ["uri"]
+            "required": ["id"]
         }
     }
 }

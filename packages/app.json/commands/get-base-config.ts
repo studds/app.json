@@ -2,7 +2,7 @@ import { IAppJSON } from '../interfaces';
 
 export function getBaseConfig(): IAppJSON {
     return {
-        uri: '',
+        id: '',
         env: {},
         environments: {
             local: {
