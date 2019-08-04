@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { exportDotenv } from './commands/export-dotenv';
-import { init } from './commands/init';
 import { generateFromCf } from './commands/generate';
+import { init } from './commands/init';
 
 const command = process.argv[2];
 

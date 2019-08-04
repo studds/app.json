@@ -9,6 +9,10 @@
 
 export interface IAppJSON {
     /**
+     * List of components for this app
+     */
+    components?: IComponent[];
+    /**
      * List of dependencies for this app
      */
     dependencies?: IDependency[];
@@ -28,13 +32,9 @@ export interface IAppJSON {
      */
     environments?: { [key: string]: IEnvironment };
     /**
-     * Unique identifier for this app. This is used to resolve dependencies.
+     * Unique name for this app. This is used to resolve dependencies.
      */
-    id: string;
-    /**
-     * Human-friendly name for this app (if the id isn't friendly enough)
-     */
-    name?: string;
+    name: string;
     /**
      * Outputs that are available once this app is deployed
      */
@@ -42,18 +42,32 @@ export interface IAppJSON {
 }
 
 /**
+ * List of components for this app
+ */
+export interface IComponent {
+    /**
+     * The name of this component
+     */
+    name: string;
+    /**
+     * The environment variables for this component (must be defined in the env section)
+     */
+    variables: string[];
+}
+
+/**
  * List of dependencies for this app
  */
 export interface IDependency {
-    /**
-     * The id of the app we're dependent on (as defined in another app.json)
-     */
-    id: string;
     /**
      * The environment variables to import from this dependency (must much those defined in
      * app.json)
      */
     imports: string[];
+    /**
+     * The name of the app we're dependent on (as defined in another app.json)
+     */
+    name: string;
 }
 
 export interface IEnvVarDefinition {
@@ -66,6 +80,10 @@ export interface IEnvVarDefinition {
      * (default: true).
      */
     required?: boolean;
+    /**
+     * The type of parameter, can be used to indicate the source for example
+     */
+    type?: string[];
     /**
      * a default value to use. This should always be a string.
      */
@@ -236,20 +254,25 @@ function r(name: string) {
 
 const typeMap: any = {
     "IAppJSON": o([
+        { json: "components", js: "components", typ: u(undefined, a(r("IComponent"))) },
         { json: "dependencies", js: "dependencies", typ: u(undefined, a(r("IDependency"))) },
         { json: "env", js: "env", typ: u(undefined, m(u(r("IEnvVarDefinition"), ""))) },
         { json: "environments", js: "environments", typ: u(undefined, m(r("IEnvironment"))) },
-        { json: "id", js: "id", typ: "" },
-        { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "name", js: "name", typ: "" },
         { json: "output", js: "output", typ: u(undefined, m(r("IOutputDefinition"))) },
     ], "any"),
+    "IComponent": o([
+        { json: "name", js: "name", typ: "" },
+        { json: "variables", js: "variables", typ: a("") },
+    ], "any"),
     "IDependency": o([
-        { json: "id", js: "id", typ: "" },
         { json: "imports", js: "imports", typ: a("") },
+        { json: "name", js: "name", typ: "" },
     ], "any"),
     "IEnvVarDefinition": o([
         { json: "description", js: "description", typ: "" },
         { json: "required", js: "required", typ: u(undefined, true) },
+        { json: "type", js: "type", typ: u(undefined, a("")) },
         { json: "value", js: "value", typ: u(undefined, "") },
     ], "any"),
     "IEnvironment": o([

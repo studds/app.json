@@ -16,10 +16,12 @@
                     "type": "string",
                     "title": "value"
                 },
-                "required": {
-                    "description": "A boolean indicating whether the given value is required for the app to function (default: true).",
-                    "type": "boolean",
-                    "title": "required"
+                "type": {
+                    "description": "The type of parameter, can be used to indicate the source for example",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             },
             "required": ["description"]
@@ -43,10 +45,10 @@
             "title": "IDependency",
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "The id of the app we're dependent on (as defined in another app.json)",
+                "name": {
+                    "description": "The name of the app we're dependent on (as defined in another app.json)",
                     "type": "string",
-                    "title": "id"
+                    "title": "name"
                 },
                 "imports": {
                     "description": "The environment variables to import from this dependency (must much those defined in app.json)",
@@ -56,13 +58,39 @@
                     }
                 }
             },
-            "required": ["id", "imports"]
+            "required": ["name", "imports"]
         },
         "IDependencies": {
             "description": "List of dependencies for this app",
             "type": "array",
             "items": {
                 "$ref": "#/definitions/IDependency"
+            }
+        },
+        "IComponent": {
+            "title": "IComponent",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "The name of this component",
+                    "type": "string",
+                    "title": "name"
+                },
+                "variables": {
+                    "description": "The environment variables for this component (must be defined in the env section)",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": ["name", "variables"]
+        },
+        "IComponents": {
+            "description": "List of components for this app",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/IComponent"
             }
         },
         "IOutputDefinition": {
@@ -111,13 +139,8 @@
             "title": "IAppJson",
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "Unique identifier for this app. This is used to resolve dependencies.",
-                    "type": "string",
-                    "title": "id"
-                },
                 "name": {
-                    "description": "Human-friendly name for this app (if the id isn't friendly enough)",
+                    "description": "Unique name for this app. This is used to resolve dependencies.",
                     "type": "string",
                     "title": "name"
                 },
@@ -131,6 +154,11 @@
                     "$ref": "#/definitions/IDependencies",
                     "title": "dependencies"
                 },
+                "components": {
+                    "description": "List of components for this app",
+                    "$ref": "#/definitions/IComponents",
+                    "title": "components"
+                },
                 "environments": {
                     "description": "A key-value object holding environment-specific overrides for app.json keys.\nEach key in the object is the name of an environment.\nThis can include runtime environments, but can also include 'local' for local development or 'ci'\nfor CI.",
                     "$ref": "#/definitions/IEnvironments",
@@ -142,7 +170,7 @@
                     "title": "output"
                 }
             },
-            "required": ["id"]
+            "required": ["name"]
         }
     }
 }
