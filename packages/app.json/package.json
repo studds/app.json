@@ -1,7 +1,8 @@
 {
-  "name": "app.json",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@app.json/cli",
+  "version": "0.0.1",
+  "description": "Capture what your app needs to be deployed and run",
+  "keywords": ["app.json", "config", "app", "microservices", "deploy", "run"],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,9 +11,9 @@
     "prepublishOnly": "run-s build"
   },
   "bin": {
-    "appcfg": "index.js"
+    "ajx": "index.js"
   },
-  "author": "",
+  "author": "studds@fastmail.com",
   "license": "MIT",
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
