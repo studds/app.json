@@ -1,6 +1,6 @@
+import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
 import { IAppJSON, IEnvVarDefinition } from '../interfaces';
-import { config } from 'dotenv';
 import { loadAppJson } from './load-app-json';
 
 export function exportDotenv(environmentName?: string) {

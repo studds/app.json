@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { exportDotenv } from './commands/export-dotenv';
+import { exportTs } from './commands/export-ts';
 import { generateFromCf } from './commands/generate';
 import { init } from './commands/init';
 
@@ -12,7 +13,9 @@ if (command === 'init') {
     exportDotenv();
 } else if (command === 'generate') {
     generateFromCf();
+} else if (command === 'ts') {
+    exportTs();
 } else {
-    console.error('Incorrect usage: ajx init|dotenv');
+    console.error('Incorrect usage: ajx init|dotenv|generate|ts');
     process.exit(1);
 }
