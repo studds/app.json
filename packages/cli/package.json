@@ -1,14 +1,21 @@
 {
   "name": "@app.json/cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Capture what your app needs to be deployed and run",
-  "keywords": ["app.json", "config", "app", "microservices", "deploy", "run"],
+  "keywords": [
+    "app.json",
+    "config",
+    "app",
+    "microservices",
+    "deploy",
+    "run"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "gen": "quicktype -s schema schema.json -o interfaces.ts --top-level IAppJson",
     "build": "tsc",
-    "prepublishOnly": "run-s build"
+    "prepublishOnly": "run-s gen build"
   },
   "bin": {
     "ajx": "index.js"

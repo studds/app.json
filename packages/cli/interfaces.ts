@@ -76,11 +76,6 @@ export interface IEnvVarDefinition {
      */
     description: string;
     /**
-     * A boolean indicating whether the given value is required for the app to function
-     * (default: true).
-     */
-    required?: boolean;
-    /**
      * The type of parameter, can be used to indicate the source for example
      */
     type?: string[];
@@ -271,7 +266,6 @@ const typeMap: any = {
     ], "any"),
     "IEnvVarDefinition": o([
         { json: "description", js: "description", typ: "" },
-        { json: "required", js: "required", typ: u(undefined, true) },
         { json: "type", js: "type", typ: u(undefined, a("")) },
         { json: "value", js: "value", typ: u(undefined, "") },
     ], "any"),
