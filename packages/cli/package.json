@@ -1,6 +1,5 @@
 {
   "name": "@app.json/cli",
-  "version": "0.0.6",
   "description": "Capture what your app needs to be deployed and run",
   "keywords": [
     "app.json",
@@ -20,12 +19,5 @@
     "type": "git",
     "url": "https://github.com/studds/app.json",
     "directory": "packages/cli"
-  },
-  "dependencies": {
-    "dotenv": "^8.0.0",
-    "prettier": "^1.18.2",
-    "@app.json/core": "latest",
-    "@app.json/cloudformation": "latest",
-    "yargs": "^15.0.2"
   }
 }

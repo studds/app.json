@@ -1,6 +1,5 @@
 {
   "name": "@app.json/cloudformation",
-  "version": "0.0.5",
   "description": "Plugin for @app.json/cli that parses CloudFormation templates and extract config information",
   "keywords": [
     "app.json",
@@ -17,10 +16,5 @@
     "type": "git",
     "url": "https://github.com/studds/app.json",
     "directory": "packages/cloudformation"
-  },
-  "dependencies": {
-    "cloudformation-js-yaml-schema": "^0.4.2",
-    "js-yaml": "^3.13.1",
-    "lodash.merge": "^4.6.2"
   }
 }
