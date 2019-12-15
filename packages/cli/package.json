@@ -1,6 +1,6 @@
 {
   "name": "@app.json/cli",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Capture what your app needs to be deployed and run",
   "keywords": [
     "app.json",
@@ -10,43 +10,22 @@
     "deploy",
     "run"
   ],
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "gen": "quicktype -s schema schema.json -o interfaces.ts --top-level IAppJson",
-    "build": "tsc",
-    "prepublishOnly": "run-s gen build"
-  },
+  "main": "src/index.js",
   "bin": {
-    "ajx": "index.js"
+    "ajx": "src/index.js"
   },
   "author": "studds@fastmail.com",
   "license": "MIT",
-  "devDependencies": {
-    "@types/dotenv": "^6.1.1",
-    "@types/js-yaml": "^3.12.1",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/node": "^10.14.13",
-    "@types/prettier": "^1.18.1",
-    "cloudform-types": "^4.0.0-alpha.0",
-    "npm-run-all": "^4.1.5",
-    "quicktype": "^15.0.197",
-    "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.5.3"
-  },
-  "dependencies": {
-    "@angular-devkit/core": "^8.1.2",
-    "cloudformation-js-yaml-schema": "^0.4.2",
-    "dotenv": "^8.0.0",
-    "js-yaml": "^3.13.1",
-    "lodash.merge": "^4.6.2",
-    "prettier": "^1.18.2"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/studds/app.json",
     "directory": "packages/cli"
+  },
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "prettier": "^1.18.2",
+    "@app.json/core": "latest",
+    "@app.json/cloudformation": "latest",
+    "yargs": "^15.0.2"
   }
 }

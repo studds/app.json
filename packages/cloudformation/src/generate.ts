@@ -1,16 +1,20 @@
-import { underscore } from '@angular-devkit/core/src/utils/strings';
+import {
+    getBaseConfig,
+    IAppJSON,
+    IEnvVarDefinition,
+    underscore,
+    writeAppJson
+} from '@app.json/core';
 import Template from 'cloudform-types/types/template';
 import merge from 'lodash.merge';
-import { IAppJSON, IEnvVarDefinition } from '../interfaces';
-import { getBaseConfig } from './get-base-config';
+import { parse, resolve } from 'path';
 import { loadCloudFormationTemplate } from './load-cloud-formation-template';
-import { writeAppJson } from './write-app-json';
 
 type IEnvVar = IEnvVarDefinition | string;
 
 // todo: extract this to a separate package, which means also extracting the interfaces
-export function generateFromCf() {
-    const template = loadCloudFormationTemplate('template.yaml');
+export function generateFromCf(templatePath: string) {
+    const template = loadCloudFormationTemplate(templatePath);
     const baseJson = getBaseConfig();
     const components = getComponents(template);
     const outJson: Partial<IAppJSON> = {
@@ -19,7 +23,8 @@ export function generateFromCf() {
         components
     };
     const appJson = merge(baseJson, outJson);
-    writeAppJson(appJson);
+    const appJsonPath = resolve(parse(templatePath).dir, 'app.json');
+    writeAppJson(appJsonPath, appJson);
 }
 
 function getEnv(

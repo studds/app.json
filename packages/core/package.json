@@ -1,0 +1,24 @@
+{
+  "name": "@app.json/core",
+  "version": "0.0.5",
+  "description": "Core of @app.json/cli",
+  "keywords": [
+    "app.json",
+    "config",
+    "app",
+    "microservices",
+    "deploy",
+    "run"
+  ],
+  "main": "src/index.js",
+  "author": "studds@fastmail.com",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/studds/app.json",
+    "directory": "packages/core"
+  },
+  "dependencies": {
+    
+  }
+}

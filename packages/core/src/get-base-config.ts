@@ -1,4 +1,4 @@
-import { IAppJSON } from '../interfaces';
+import { IAppJSON } from './interfaces';
 
 export function getBaseConfig(): IAppJSON {
     return {

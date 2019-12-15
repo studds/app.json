@@ -1,11 +1,10 @@
-import { camelize } from '@angular-devkit/core/src/utils/strings';
+import { camelize, IAppJSON, IComponent, loadAppJson } from '@app.json/core';
 import { writeFileSync } from 'fs';
+import { parse, resolve } from 'path';
 import { format } from 'prettier';
-import { IAppJSON, IComponent } from '../interfaces';
-import { loadAppJson } from './load-app-json';
 
-export function exportTs() {
-    const appJson = loadAppJson();
+export function exportTs(appJsonPath: string) {
+    const appJson = loadAppJson(appJsonPath);
     const code = [
         `function getEnvSafe(name: string): string {
         const value = process.env[name];
@@ -16,8 +15,9 @@ export function exportTs() {
     }`
     ];
     code.push(...generateConfigTs(appJson));
+    const configPath = resolve(parse(appJsonPath).dir, 'config.ts');
     writeFileSync(
-        'config.ts',
+        configPath,
         format(code.join('\n'), {
             singleQuote: true,
             tabWidth: 4,
